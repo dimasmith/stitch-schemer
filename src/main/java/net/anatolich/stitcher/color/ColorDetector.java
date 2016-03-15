@@ -7,11 +7,11 @@ import net.anatolich.stitcher.image.ImageData;
  */
 public class ColorDetector {
 
-    public ColorData analyzeImageColors(ImageData image) {
-        final ColorData.Builder colorData = ColorData.buildColorData();
+    public ColorHistogram analyzeImageColors(ImageData image) {
+        final ColorHistogram.Builder colorData = ColorHistogram.buildColorData();
         for (int x = 0; x < image.getWidth(); x++) {
             for (int y = 0; y < image.getHeight(); y++) {
-                colorData.withColor(image.getColor(x, y));
+                colorData.withColors(image.getColor(x, y));
             }
         }
         return colorData.build();

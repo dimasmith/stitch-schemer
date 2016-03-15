@@ -10,18 +10,30 @@ import static java.util.Collections.unmodifiableSet;
 /**
  * Contain all colors in image.
  */
-public class ColorData {
+public class ColorHistogram {
 
     private final Map<Color, Integer> histogram;
     private final Set<Color> distinctColors;
 
-    private ColorData(Map<Color, Integer> histogram) {
+    private ColorHistogram(Map<Color, Integer> histogram) {
         this.histogram = unmodifiableMap(histogram);
         this.distinctColors = unmodifiableSet(histogram.keySet());
     }
 
     public static Builder buildColorData() {
         return new Builder();
+    }
+
+    public static ColorHistogram of(Color... colors) {
+        return buildColorData().withColors(colors).build();
+    }
+
+    public static ColorHistogram of(Iterable<Color> colors) {
+        final Builder colorDataBuilder = buildColorData();
+        for (Color color : colors) {
+            colorDataBuilder.withColors(color);
+        }
+        return colorDataBuilder.build();
     }
 
     public Set<Color> imageColors() {
@@ -32,18 +44,28 @@ public class ColorData {
         return histogram;
     }
 
+    public int countColorPixels(Color color) {
+        return histogram.getOrDefault(color, 0);
+    }
+
     public static class Builder {
 
         private Map<Color, Integer> histogram = new HashMap<>();
 
-        public Builder withColor(Color color) {
-            histogram.putIfAbsent(color, 0);
-            histogram.compute(color, (c, count) -> count + 1);
+        public Builder withColors(Color... colors) {
+            for (Color color : colors) {
+                addColor(color);
+            }
             return this;
         }
 
-        public ColorData build() {
-            return new ColorData(histogram);
+        private void addColor(Color color) {
+            histogram.putIfAbsent(color, 0);
+            histogram.compute(color, (c, count) -> count + 1);
+        }
+
+        public ColorHistogram build() {
+            return new ColorHistogram(histogram);
         }
     }
 }
