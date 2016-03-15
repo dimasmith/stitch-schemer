@@ -22,7 +22,7 @@ public class ImageReader {
         ImageData imageData = new ImageData(image.getWidth(), image.getHeight());
         for (int x = 0; x < image.getWidth(); x++) {
             for (int y = 0; y < image.getHeight(); y++) {
-                imageData.setColor(x, y, new Color(image.getRGB(x, y));
+                imageData.setColor(x, y, new Color(image.getRGB(x, y)));
             }
         }
         return imageData;
